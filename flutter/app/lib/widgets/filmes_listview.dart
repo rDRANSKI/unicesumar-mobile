@@ -9,11 +9,12 @@ class FilmesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return ListView.builder( //Desafio 1: Uso de ListView.builder para otimizar a renderização da lista
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-      children: <Widget>[
-        for (final FilmeItem filme in filmes)
-          Center(
+       itemCount: filmes.length,
+        itemBuilder: (context, index) {
+          final FilmeItem filme = filmes[index];
+          return Center( //Adicionado "return" para que o itemBuilder retorne corretamente o widget de cada item da lista, permitindo a renderização na tela.
             child: Container(
               width: 220,
               margin: const EdgeInsets.only(bottom: 16),
@@ -64,8 +65,8 @@ class FilmesListView extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-      ],
+          );
+        },
     );
   }
 }
