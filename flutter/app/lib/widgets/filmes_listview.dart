@@ -9,64 +9,77 @@ class FilmesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder( //Desafio 1: Uso de ListView.builder para otimizar a renderização da lista
+    return ListView.builder(
+      //Desafio 1: Uso de ListView.builder para otimizar a renderização da lista
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-       itemCount: filmes.length,
-        itemBuilder: (context, index) {
-          final FilmeItem filme = filmes[index];
-          return Center( //Adicionado "return" para que o itemBuilder retorne corretamente o widget de cada item da lista, permitindo a renderização na tela.
-            child: Container(
-              width: 220,
-              margin: const EdgeInsets.only(bottom: 16),
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.black12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 27 / 40,
-                    child: Image.network(
-                      filme.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder:
-                          (
-                            BuildContext context,
-                            Object error,
-                            StackTrace? stackTrace,
-                          ) {
-                            return Container(
-                              color: const Color(0xFFB0BEC5),
-                              alignment: Alignment.center,
-                              child: const Icon(
-                                Icons.broken_image_rounded,
-                                color: Colors.white,
-                                size: 40,
-                              ),
-                            );
-                          },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      filme.titulo,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+      itemCount: filmes.length,
+      itemBuilder: (context, index) {
+        final FilmeItem filme = filmes[index];
+        return Center(
+          //Adicionado "return" para que o itemBuilder retorne corretamente o widget de cada item da lista, permitindo a renderização na tela.
+          child: Material( //Necessário para exibir corretamente o efeito visual do InkWell
+            color: Colors.transparent,
+            child: InkWell( // Adiciona interação ao item da lista, conseguindo ver o toque do usuário
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Filme selecionado: ${filme.titulo}')), //Exibe feedback visual ao usuário ao selecionar um filme
+                );
+              },
+              child: Container(
+                width: 220,
+                margin: const EdgeInsets.only(bottom: 16),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.black12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 27 / 40,
+                      child: Image.network(
+                        filme.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (
+                              BuildContext context,
+                              Object error,
+                              StackTrace? stackTrace,
+                            ) {
+                              return Container(
+                                color: const Color(0xFFB0BEC5),
+                                alignment: Alignment.center,
+                                child: const Icon(
+                                  Icons.broken_image_rounded,
+                                  color: Colors.white,
+                                  size: 40,
+                                ),
+                              );
+                            },
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text(
+                        filme.titulo,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          );
-        },
+          ),
+        );
+      },
     );
   }
 }
